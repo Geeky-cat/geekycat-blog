@@ -1,4 +1,4 @@
-baseURL = 'https://geekycat.github.io/'
+baseURL = 'https://blog.geekycat.in/'
 languageCode = 'en-us'
 title = 'Geekycat Blog'
 theme = "hugo-blog-awesome"

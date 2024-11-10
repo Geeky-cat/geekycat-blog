@@ -1,7 +1,7 @@
 {
     "name": "Geekycat Blog",
     "short_name": "Geekycat Blog",
-    "start_url": "http://localhost:1313/",
+    "start_url": "https://blog.geekycat.in/",
     "theme_color": "#434648",
     "background_color": "#131418",
     "display": "standalone",

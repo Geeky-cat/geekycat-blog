@@ -2,23 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://blog.geekycat.in/</loc>
     <lastmod>2023-01-15T20:12:33+05:30</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/</loc>
+    <loc>https://blog.geekycat.in/posts/</loc>
     <lastmod>2023-01-15T20:12:33+05:30</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/xss-using-postmessage-in-google-cloud-theia-notebooks/</loc>
+    <loc>https://blog.geekycat.in/posts/xss-using-postmessage-in-google-cloud-theia-notebooks/</loc>
     <lastmod>2023-01-15T20:12:33+05:30</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/client-side-ssrf-to-google-cloud-project-takeover/</loc>
+    <loc>https://blog.geekycat.in/posts/client-side-ssrf-to-google-cloud-project-takeover/</loc>
     <lastmod>2023-01-12T19:42:44+05:30</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/hijacking-google-docs-screenshots/</loc>
+    <loc>https://blog.geekycat.in/posts/hijacking-google-docs-screenshots/</loc>
     <lastmod>2020-12-27T19:13:19+05:30</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>https://blog.geekycat.in/categories/</loc>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://blog.geekycat.in/tags/</loc>
   </url>
 </urlset>
