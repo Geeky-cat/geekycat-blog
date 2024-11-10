@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Geekycat Blog</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on Geekycat Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 15 Jan 2023 20:12:33 +0530</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>XSS using postMessage in Google Cloud Theia notebooks [Google VRP]</title>
+      <link>http://localhost:1313/posts/xss-using-postmessage-in-google-cloud-theia-notebooks/</link>
+      <pubDate>Sun, 15 Jan 2023 20:12:33 +0530</pubDate>
+      
+      <guid>http://localhost:1313/posts/xss-using-postmessage-in-google-cloud-theia-notebooks/</guid>
+      
+      <description>This write-up is a part of a series of write-ups about the bugs I and Sivanesh found in Google Cloud in 2022.
+While exploring Google Cloud’s Vertex AI Workbench, we noticed that we could create a workbench with Theia. Theia is the IDE that Google also uses in Cloud Shell. From reading previous research, we know that Theia implementations could be problematic.
+After deploying a Theia instance workbench, I noticed that the version was not the latest.</description>
+      
+    </item>
+    
+    <item>
+      <title>Client-Side SSRF to Google Cloud Project Takeover [Google VRP]</title>
+      <link>http://localhost:1313/posts/client-side-ssrf-to-google-cloud-project-takeover/</link>
+      <pubDate>Thu, 12 Jan 2023 19:42:44 +0530</pubDate>
+      
+      <guid>http://localhost:1313/posts/client-side-ssrf-to-google-cloud-project-takeover/</guid>
+      
+      <description>This write-up is a part of a series of write-ups about the bugs I and Sivanesh found in Google Cloud in 2022.
+Google Cloud offers Vertex AI, which lets you build, deploy and scale machine learning models. In addition to various other features, Vertex AI also provides a &amp;ldquo;Workbench&amp;rdquo; feature. Workbench enables you to create Jupyter notebook-based development environment on the cloud. If you have used a Jupyter notebook, you would know that there are a lot of things that could go wrong here.</description>
+      
+    </item>
+    
+    <item>
+      <title>[Google VRP] Hijacking Google Docs Screenshots</title>
+      <link>http://localhost:1313/posts/hijacking-google-docs-screenshots/</link>
+      <pubDate>Sun, 27 Dec 2020 19:13:19 +0530</pubDate>
+      
+      <guid>http://localhost:1313/posts/hijacking-google-docs-screenshots/</guid>
+      
+      <description>Brief: I was able to hijack Google Docs screenshot of any document exploiting postmessage misconfiguration and a browser behavior.
+Google have a feature called &amp;ldquo;Send Feedback&amp;rdquo; in most of their product. As the name suggests it helps Google to get feedback from users when they face some issue. The feature have an options to add screenshots with a brief description about the issue.
+As this is a common feature available in most of their sites, they have deployed the functionality in https://www.</description>
+      
+    </item>
+    
+  </channel>
+</rss>

